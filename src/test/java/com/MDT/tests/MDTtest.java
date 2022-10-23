@@ -4,67 +4,82 @@ package com.MDT.tests;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MDTtest{
-    
-@DisplayName("dataCompare")
-@Test
 
-public void dataComparison(){
+    @DisplayName("verifySensors")
+    @Test
+
+    public void dataComparison(){
 
 
-    ObjectMapper compare = new ObjectMapper();
+        ObjectMapper compare = new ObjectMapper();
 
 
         try{
 
-            JsonNode allCloudSensors = compare.readTree(new File("C:\\Users\\SdetArt\\IdeaProjects\\MDT\\src\\test\\resources\\All Cloud Sensors.json"));
+            JsonNode allCloudSensors = compare.readTree(new File("C:\\Users\\SdetArt\\IdeaProjects\\MDT\\src\\test\\resources\\All Cloud Sensors.json"));//
 
             JsonNode sensorsMetadata = compare.readTree(new File("C:\\Users\\SdetArt\\IdeaProjects\\MDT\\src\\test\\resources\\sensorMetadata.json"));
 
 
-            Map<String, Map<String, Object>> allCloudSensorsMap = compare.convertValue(allCloudSensors, new TypeReference<Map<String, Map<String, Object>>>(){});
 
-           //Map<String, ?> allCloudSensorsMap = compare.convertValue(allCloudSensors, new TypeReference<Map<String,?>>(){});
-            Map<String, ?> sensorsMetadataMap = compare.convertValue(sensorsMetadata, new TypeReference<Map<String,?>>(){});
+            Map<String, Map<String, ArrayList<Map<String,Object>>>> allCloudSensorsMap = compare.convertValue(allCloudSensors, new TypeReference<Map<String, Map<String, ArrayList<Map<String,Object>>>>>(){});
 
-            /*for (String each: sensorsMetadataMap.keySet()) {
-                
+            Map<String, ArrayList<Map<String,Object>>> sensorsMetadataMap = compare.convertValue(sensorsMetadata, new TypeReference<Map<String,ArrayList<Map<String,Object>>>>(){});
 
-                for (Object value: sensorsMetadataMap.values().toArray())
-                      {
-                          System.out.println("value = " + value);
-                          for (Object sensors: allCloudSensorsMap.values()
-                               ) {
-                              System.out.println(sensors);
-                          }
-                      }
-
-
-            }*/
-
-            for (Object entry : sensorsMetadataMap.values()){
-                /*System.out.println("Key = " + entry.getKey() +
-                        ", Value = " + entry.getValue());*/
-
-                for (Map.Entry<String, String> nameSensor : ((Map<String,?>) entry.)){
-                    System.out.println("Key = " + nameSensor.getKey() +
-                            ", Value = " + nameSensor.getValue());
-                    // how read array inside a map
-                }
-
-
+            /**
+             * //Names of sensors of cloud
+             */
+            ArrayList<String> cloudSensorNames = new ArrayList<>();
+            for (int i = 0; i < allCloudSensorsMap.get("data").get("activeSensors").toArray().length; i++) {
+                cloudSensorNames.add(allCloudSensorsMap.get("data").get("activeSensors").get(i).get("alias").toString());
             }
+//            System.out.println("cloudSensorNames.toString() = " + cloudSensorNames.toString().length());
+
+            /**
+             * //Names of sensors on premise
+             */
+            ArrayList<String> sensorsMetadataNames = new ArrayList<>();
+            for (int j = 0; j < sensorsMetadataMap.get("sensors").toArray().length; j++) {
+                sensorsMetadataNames.add(sensorsMetadataMap.get("sensors").get(j).get("name").toString());
+            }
+//            System.out.println("sensorsMetadataNames.toString() = " + sensorsMetadataNames.toArray().length);
+
+            /**     IN CLOUD - NOT ON PREMISE
+             * //Sensors that are in cloudSensorNames but are not in sensorsMetadataNames
+             */
+            ArrayList<String> notMatchingSensors = new ArrayList<>();
+            for (int k = 0; k < cloudSensorNames.toArray().length; k++) {
+                if (!sensorsMetadataNames.contains(cloudSensorNames.get(k))) {
+                    notMatchingSensors.add(cloudSensorNames.get(k));
+                }
+            }
+            /**
+             * //This line prints which sensors are in cloud but not in metadata(on premise)
+             */
+            //System.out.println("Metadata not registers this sensors: "+notMatchingSensors);
+
+
+            /**     ON PREMISE - NOT IN CLOUD
+             * //Sensors that are in sensorsMetadataNames but are not in cloudSensorNames
+             */
+            ArrayList<String> notMatchingSensorsCloudMetadata = new ArrayList<>();
+            for (int k = 0; k < sensorsMetadataNames.toArray().length; k++) {
+                if (!cloudSensorNames.contains(sensorsMetadataNames.get(k))) {
+                    notMatchingSensorsCloudMetadata.add(sensorsMetadataNames.get(k));
+                }
+            }
+            /**
+             *  //This line prints which sensors are in metadata(on premise) but not in cloud
+             */
+            System.out.println("Cloud not registers this sensors: "+notMatchingSensorsCloudMetadata);
+
 
 
 
@@ -73,18 +88,3 @@ public void dataComparison(){
         }
     }
 }
-
-
-
-
-
-   /* public List<String> getKeysInJsonUsingJsonNodeFieldNames(String json, ObjectMapper mapper) throws JsonMappingException, JsonProcessingException {
-
-        List<String> keys = new ArrayList<>();
-        JsonNode jsonNode = mapper.readTree(json);
-        Iterator<String> iterator = jsonNode.fieldNames();
-        iterator.forEachRemaining(e -> keys.add(e));
-        return keys;*/
-
-
-
