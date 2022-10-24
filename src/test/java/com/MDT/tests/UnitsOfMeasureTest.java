@@ -39,10 +39,10 @@ public class UnitsOfMeasureTest {
             Map<String, String> cloudSensorNames = new HashMap<>();
             for (int i = 0; i < allCloudSensorsMap.get("data").get("activeSensors").toArray().length; i++) {
 
-                cloudSensorNames.put(allCloudSensorsMap.get("data").get("activeSensors").get(i).get("alias").toString(), allCloudSensors.get("data").get("activeSensors").get(i).get("uom").toString());
+                cloudSensorNames.put(allCloudSensorsMap.get("data").get("activeSensors").get(i).get("alias").toString(), allCloudSensors.get("data").get("activeSensors").get(i).get("uom").toString().substring(1, allCloudSensors.get("data").get("activeSensors").get(i).get("uom").toString().length()-1));
 
             }
-       // System.out.println("cloudSensorNames.toString() = " + cloudSensorNames);
+//        System.out.println("cloudSensorNames.toString() = " + cloudSensorNames);
 
             /**
              * //Names of sensors on premise
@@ -52,43 +52,25 @@ public class UnitsOfMeasureTest {
                 sensorsMetadataNames.put(sensorsMetadataMap.get("sensors").get(j).get("name").toString(), sensorsMetadataMap.get("sensors").get(j).get("unitOfMeasure").toString());
 
             }
-            //System.out.println("sensorsMetadataNames.toString() = " + sensorsMetadataNames);
+//            System.out.println("sensorsMetadataNames.toString() = " + sensorsMetadataNames);
 
             /**     ON PREMISE - NOT IN CLOUD
              * //Sensors that are in sensorsMetadataNames but are not in cloudSensorNames
              */
             Map<String, String> UnitMissingConfiguration = new HashMap<>();
 
-           // System.out.println("cloudSensorNames.entrySet().containsAll(sensorsMetadataNames.entrySet()) = " + cloudSensorNames.entrySet().containsAll(sensorsMetadataNames.entrySet()));
+            // System.out.println("cloudSensorNames.entrySet().containsAll(sensorsMetadataNames.entrySet()) = " + cloudSensorNames.entrySet().containsAll(sensorsMetadataNames.entrySet()));
 
 
             for (Map.Entry<String, String> allCloudSensor:cloudSensorNames.entrySet()) {
-              //  System.out.println(allCloudSensor.getKey()+ "-" + allCloudSensor.getValue());
-
+                //  System.out.println(allCloudSensor.getKey()+ "-" + allCloudSensor.getValue());
                 for (Map.Entry<String, String>sensorMethadata: sensorsMetadataNames.entrySet()) {
-
-
-
-
-                    if (allCloudSensor.getKey()==sensorMethadata.getKey()&&allCloudSensor.getValue()!=sensorMethadata.getValue()){
-                       UnitMissingConfiguration.put(allCloudSensor.getKey(),allCloudSensor.getValue());
+                    if (allCloudSensor.getKey().toString().equals(sensorMethadata.getKey().toString()) && !allCloudSensor.getValue().toString().equals(sensorMethadata.getValue().toString())){
+                        UnitMissingConfiguration.put(allCloudSensor.getKey().toString(),allCloudSensor.getValue().toString());
                     }
                 }
-            }System.out.println("Units of measure not correct" + UnitMissingConfiguration);
-
-
-
-
-
-
-
-
-            /*for (int k = 0; k < sensorsMetadataNames.size(); k++) {
-                if (!cloudSensorNames.containsKey(sensorsMetadataNames.get(k)) && !cloudSensorNames.containsValue(sensorsMetadataNames.get(k))) {
-                    UnitMissingConfiguration.(sensorsMetadataNames.get(k));
-                }
-            }*/
-
+            }
+            System.out.println("Units of measure not correct" + UnitMissingConfiguration);
         }catch (Exception e){
             System.out.println("Json file not founded");
         }
