@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.*;
 
-public class MDTtest{
+public class VerifyMisconfiguredSensors {
 
     @DisplayName("verifySensors")
     @Test
@@ -24,7 +24,6 @@ public class MDTtest{
         try{
 
             JsonNode allCloudSensors = compare.readTree(new File("C:\\Users\\SdetArt\\IdeaProjects\\MDT\\src\\test\\resources\\All Cloud Sensors.json"));//
-
             JsonNode sensorsMetadata = compare.readTree(new File("C:\\Users\\SdetArt\\IdeaProjects\\MDT\\src\\test\\resources\\sensorMetadata.json"));
 
 
@@ -56,14 +55,14 @@ public class MDTtest{
              */
             ArrayList<String> notMatchingSensors = new ArrayList<>();
             for (int k = 0; k < cloudSensorNames.toArray().length; k++) {
-                if (!sensorsMetadataNames.contains(cloudSensorNames.get(k))) {
+                if (!sensorsMetadataNames.equals(cloudSensorNames.get(k))) {
                     notMatchingSensors.add(cloudSensorNames.get(k));
                 }
             }
             /**
              * //This line prints which sensors are in cloud but not in metadata(on premise)
              */
-            //System.out.println("Metadata not registers this sensors: "+notMatchingSensors);
+           System.out.println("Metadata not registers this sensors: "+notMatchingSensors);
 
 
             /**     ON PREMISE - NOT IN CLOUD
@@ -71,7 +70,7 @@ public class MDTtest{
              */
             ArrayList<String> notMatchingSensorsCloudMetadata = new ArrayList<>();
             for (int k = 0; k < sensorsMetadataNames.toArray().length; k++) {
-                if (!cloudSensorNames.contains(sensorsMetadataNames.get(k))) {
+                if (!cloudSensorNames.equals(sensorsMetadataNames.get(k))) {
                     notMatchingSensorsCloudMetadata.add(sensorsMetadataNames.get(k));
                 }
             }
