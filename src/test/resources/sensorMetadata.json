@@ -236,13 +236,6 @@
       "sampleKey": "POWERTRAIN1.PUMP_HHP",
       "displayName": "POWERTRAIN1.PUMP_HHP",
       "constraints": []
-    },
-    {
-      "name": "POWERTRAIN1.PUMP_FLOW_TOTAL",
-      "unitOfMeasure": "BBL",
-      "sampleKey": "POWERTRAIN1.PUMP_FLOW_TOTAL",
-      "displayName": "POWERTRAIN1.PUMP_FLOW_TOTAL",
-      "constraints": []
     }
   ]
 }
