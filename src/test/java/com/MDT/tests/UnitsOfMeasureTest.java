@@ -23,7 +23,7 @@ public class UnitsOfMeasureTest {
 
         try{
 
-            JsonNode allCloudSensors = compare.readTree(new File("C:\\Users\\SdetArt\\IdeaProjects\\MDT\\src\\test\\resources\\All Cloud Sensors.json"));//
+            JsonNode allCloudSensors = compare.readTree(new File("C:\\Users\\SdetArt\\IdeaProjects\\MDT\\src\\test\\resources\\All Cloud Sensors.json"));
 
             JsonNode sensorsMetadata = compare.readTree(new File("C:\\Users\\SdetArt\\IdeaProjects\\MDT\\src\\test\\resources\\sensorMetadata.json"));
 
@@ -65,8 +65,8 @@ public class UnitsOfMeasureTest {
             for (Map.Entry<String, String> allCloudSensor:cloudSensorNames.entrySet()) {
                 //  System.out.println(allCloudSensor.getKey()+ "-" + allCloudSensor.getValue());
                 for (Map.Entry<String, String>sensorMethadata: sensorsMetadataNames.entrySet()) {
-                    if (allCloudSensor.getKey().toString().equals(sensorMethadata.getKey().toString()) && !allCloudSensor.getValue().toString().equals(sensorMethadata.getValue().toString())){
-                        UnitMissingConfiguration.put(allCloudSensor.getKey().toString(),allCloudSensor.getValue().toString());
+                    if (allCloudSensor.getKey().equals(sensorMethadata.getKey()) && !allCloudSensor.getValue().equals(sensorMethadata.getValue())){
+                        UnitMissingConfiguration.put(allCloudSensor.getKey(),allCloudSensor.getValue());
                     }
                 }
             }
