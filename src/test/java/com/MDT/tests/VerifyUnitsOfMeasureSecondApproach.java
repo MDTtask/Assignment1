@@ -53,7 +53,7 @@ public class VerifyUnitsOfMeasureSecondApproach {
                 sensorsMetadataNames.put(sensorsMetadataMap.get("sensors").get(j).get("name").toString(), sensorsMetadataMap.get("sensors").get(j).get("unitOfMeasure").toString());
 
             }
-            /**     ON PREMISE - NOT IN CLOUD
+            /**     ON PREMISE - NOT IN CLOUD to Correct
              * //Sensors that are in sensorsMetadataNames but are not in cloudSensorNames
              */
             Map<String, String> UnitMissingConfiguration = new HashMap<>();
@@ -68,7 +68,7 @@ public class VerifyUnitsOfMeasureSecondApproach {
                 }
             }
             System.out.println("Units of measure correct" + UnitMissingConfiguration);
-            System.out.println("Units of measure NOTcorrect" + UnitConfigurationInCloud);
+            System.out.println("Units of measure NOT correct" + UnitConfigurationInCloud);
 
 
         } catch (Exception e) {
